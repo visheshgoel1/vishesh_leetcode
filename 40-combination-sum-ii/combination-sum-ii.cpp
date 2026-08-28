@@ -1,25 +1,30 @@
 class Solution {
 public:
-    void findCombination(int ind, int target, vector<int> &arr, vector<vector<int>> &ans, vector<int> &ds){
+    vector<vector<int>> ans;
+
+    void solve(int idx, int target, vector<int>& candidates, vector<int>& ds){
         if(target == 0){
             ans.push_back(ds);
             return;
         }
-        for(int i=ind; i<arr.size(); i++){
-            if(i>ind && arr[i]==arr[i-1]) continue;
-            if(arr[i] > target) break;
-            ds.push_back(arr[i]);
-            findCombination(i+1, target-arr[i], arr, ans, ds);
+        
+        for(int i=idx; i<candidates.size(); i++){
+            if (i > idx && candidates[i] == candidates[i - 1])
+                continue;
+
+            if (candidates[i] > target)
+                break;
+
+            ds.push_back(candidates[i]);
+            solve(i + 1, target - candidates[i], candidates, ds);
             ds.pop_back();
         }
     }
 
-public:
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
         sort(candidates.begin(), candidates.end());
-        vector<vector<int>> ans;
         vector<int> ds;
-        findCombination(0, target, candidates, ans, ds);
+        solve(0, target, candidates, ds);
         return ans;
     }
 };
